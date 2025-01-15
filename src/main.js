@@ -24,7 +24,7 @@ export default async ({ req, res, log, error }) => {
       // Send a response
       return res.json({ message: 'Document created successfully!', response });
     }
-    catch(e){
+    catch(err){
       log(err.message);
       return res.status(500).json({ error: 'Failed to create document' });
     }
