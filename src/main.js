@@ -20,7 +20,7 @@ export default async ({ req, res, log, error }) => {
   } else if (req.method == 'POST') {
     try{
       const  payload  =  JSON.parse(req.body);
-      const response = await db.createDocument(databaseId, collectionId, ID.unique(), payload, ["read('any')"])
+      const response = await db.createDocument(databaseId, collectionId, ID.unique(), payload)
       // Send a response
       return res.json({ message: 'Document created successfully!', response });
     }
