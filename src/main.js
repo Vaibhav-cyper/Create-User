@@ -28,8 +28,6 @@ export default async ({ req, res, log, error }) => {
       log(err.message);
       return res.status(500).json({ error: 'Failed to create document' });
     }
-  }else {
-    res.status(405).json({ error: 'Method not allowed' });
   }
   
 };
