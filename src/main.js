@@ -18,9 +18,11 @@ export default async ({ req, res, log, error }) => {
     const response = await db.listDocuments(databaseId, collectionId)
     return res.json(response.documents);
   } else if (req.method == 'POST') {
-    const  payload  = await req.json();
+    const  payload  = await req.body;
     const response = await db.createDocument(databaseId, collectionId, ID.unique(), payload, [Permission.read(Role.user('<USER_ID>')), Permission.read(Role.any())])
-    return res.json(response.$id);
+    return res.json({ message: 'Data received successfully!' });;
+    // Send a response
+  
   }
   
 };
