@@ -18,11 +18,18 @@ export default async ({ req, res, log, error }) => {
     const response = await db.listDocuments(databaseId, collectionId)
     return res.json(response.documents);
   } else if (req.method == 'POST') {
-    const  payload  = await req.body;
-    const response = await db.createDocument(databaseId, collectionId, ID.unique(), payload, ["read('any')"])
-    return res.json({ message: 'Data received successfully!' });;
-    // Send a response
-  
+    try{
+      const  payload  =  JSON.parse(req.body);
+      const response = await db.createDocument(databaseId, collectionId, ID.unique(), payload, ["read('any')"])
+      // Send a response
+      return res.json({ message: 'Document created successfully!', response });
+    }
+    catch(e){
+      log(err.message);
+      return res.status(500).json({ error: 'Failed to create document' });
+    }
+  }else {
+    res.status(405).json({ error: 'Method not allowed' });
   }
   
 };
