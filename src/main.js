@@ -1,4 +1,4 @@
-import { Client, Databases, ID } from 'node-appwrite';
+import { Client, Databases } from 'node-appwrite';
 
 
 const projectID = process.env.PROJECT_ID;
@@ -19,7 +19,7 @@ export default async ({ req, res, log, error }) => {
     return res.json(response.documents);
   }
   try {
-    const payload = JSON.parse(req.body);
+    const payload = req.body;
     log("Parsed payload:", payload);
     // Extract user details from the payload
     const userId = payload['$id'];
@@ -35,7 +35,7 @@ export default async ({ req, res, log, error }) => {
       Sub: userId,
     };
 
-    const response = await db.createDocument(databaseId, collectionId, ID.unique(), documentData)
+    const response = await db.createDocument(databaseId, collectionId, userId, documentData)
     // Send a response
     return res.json({ message: 'Document created successfully!', response });
   }
