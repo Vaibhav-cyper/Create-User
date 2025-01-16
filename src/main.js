@@ -17,32 +17,32 @@ export default async ({ req, res, log, error }) => {
   if (req.method == 'GET') {
     const response = await db.listDocuments(databaseId, collectionId)
     return res.json(response.documents);
-  }
-  try {
-    const payload = JSON.parse(req.body);
-    log("Parsed payload:", payload);
-    // Extract user details from the payload
-    const userId = payload['$id'];
-    const userName = payload['name'];
-    const userEmail = payload['email'];
+  } else if (req.method == 'POST') {
+    try {
+      const payload = JSON.parse(req.body);
+      log("Parsed payload:", payload);
+      // Extract user details from the payload
+      const userId = payload['$id'];
+      const userName = payload['name'];
+      const userEmail = payload['email'];
 
-    const documentData = {
-      FirstName: userName.split(" ")[0],
-      LastName: userName.split(" ")[1] || "",
-      User_Email: userEmail,
-      Subscription_Status: "Free",
-      User_Created: new Date().toISOString(),
-      Sub: userId,
-    };
+      const documentData = {
+        FirstName: userName.split(" ")[0],
+        LastName: userName.split(" ")[1] || "",
+        User_Email: userEmail,
+        Subscription_Status: "Free",
+        User_Created: new Date().toISOString(),
+        Sub: userId,
+      };
 
-    const response = await db.createDocument(databaseId, collectionId, ID.unique(), documentData)
-    // Send a response
-    return res.json({ message: 'Document created successfully!', response });
+      const response = await db.createDocument(databaseId, collectionId, ID.unique(), documentData)
+      // Send a response
+      return res.json({ message: 'Document created successfully!', response });
+    }
+    catch (err) {
+      log(err.message);
+      return res.send('Failed to create document');
+    }
   }
-  catch (err) {
-    log(err.message);
-    return res.send('Failed to create document');
-  }
-
 
 };
